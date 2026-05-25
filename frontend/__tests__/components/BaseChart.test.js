@@ -52,9 +52,11 @@ describe('BaseChart.vue', () => {
 
   it('disposes ECharts instance on unmount', async () => {
     const wrapper = mount(BaseChart, {
-      props: { options: {} }
+      props: { options: { xAxis: {}, yAxis: {}, series: [] } }
     })
-    await wrapper.vm.$nextTick()
+    await vi.waitFor(() => {
+      expect(echarts.init).toHaveBeenCalled()
+    }, { timeout: 100 })
     wrapper.unmount()
     expect(mockInstance.dispose).toHaveBeenCalled()
   })

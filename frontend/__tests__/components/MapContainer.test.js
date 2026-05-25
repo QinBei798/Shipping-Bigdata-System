@@ -20,6 +20,8 @@ global.ResizeObserver = vi.fn().mockImplementation(() => ({
 }))
 
 global.fetch = vi.fn(() => Promise.resolve({
+  ok: true,
+  status: 200,
   json: () => Promise.resolve({ type: 'FeatureCollection', features: [] })
 }))
 

@@ -51,11 +51,15 @@ async function loadStaticData() {
     const [ports, indices, routes] = await Promise.all([
       fetchPorts(), fetchIndices(), fetchRoutes()
     ])
+    console.debug('[Dashboard] ✅ 静态数据加载成功', { ports, indices, routes })
+    // ports 返回的是 { year, unit, list } → 取 .list
     marketStore.setPorts(ports.list)
+    // indices 返回的是 { indexName, frequency, description, timeline } → 整体存储
     marketStore.setIndices(indices)
+    // routes 返回的是 { category, routes } → 取 .routes
     mapStore.setRoutes(routes.routes)
   } catch (e) {
-    console.error('Failed to load static data:', e)
+    console.error('[Dashboard] ❌ 静态数据加载失败:', e)
   }
 }
 
@@ -64,7 +68,7 @@ async function loadVessels() {
     const data = await fetchVessels()
     mapStore.setVessels(data.list)
   } catch (e) {
-    console.error('Failed to load vessels:', e)
+    console.error('[Dashboard] ❌ 船舶数据加载失败:', e)
   }
 }
 
@@ -117,6 +121,7 @@ onUnmounted(() => {
   min-height: 0;
 }
 
+/* ── 关键修复：panel-card 必须是 flex column 容器，高度才能向下传递 ── */
 .panel-card {
   background: var(--color-bg-panel);
   border: 1px solid var(--color-border-panel);
@@ -124,6 +129,8 @@ onUnmounted(() => {
   padding: 12px;
   flex: 1;
   min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .panel-title {
@@ -133,10 +140,13 @@ onUnmounted(() => {
   margin-bottom: 8px;
   padding-left: 8px;
   border-left: 3px solid var(--color-accent-cyan);
+  flex-shrink: 0;
 }
 
+/* ── 关键修复：chart-wrapper 必须有 flex:1 + min-height 才能让 ECharts 获得真实像素高度 ── */
 .chart-wrapper {
   flex: 1;
-  min-height: 0;
+  min-height: 120px;
+  position: relative;
 }
 </style>

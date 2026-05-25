@@ -48,10 +48,10 @@ describe('RouteCapacity.vue', () => {
     const opts = mockInstance.setOption.mock.calls.at(-1)[0]
     expect(opts.yAxis).toBeDefined()
     expect(opts.yAxis.type).toBe('category')
-    expect(opts.yAxis.data).toEqual(['远东-非洲航线', '美西航线', '远东-西欧航线'])
+    expect(opts.yAxis.data).toEqual(['远东-西欧航线', '美西航线', '远东-非洲航线'])
     expect(opts.series).toBeDefined()
     expect(opts.series[0].type).toBe('bar')
-    expect(opts.series[0].data).toEqual([1950000, 3200000, 4850000])
+    expect(opts.series[0].data).toEqual([4850000, 3200000, 1950000])
   })
 
   it('shows empty chart when no routes in store', () => {

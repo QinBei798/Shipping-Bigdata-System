@@ -59,10 +59,15 @@ const chartOptions = computed(() => {
 })
 
 onMounted(async () => {
-  const res = await fetch('/data/world.json')
-  const geoJSON = await res.json()
-  echarts.registerMap('world', geoJSON)
-  geoRegistered.value = true
+  try {
+    const res = await fetch('/data/world.json')
+    if (!res.ok) throw new Error(`GeoJSON fetch failed: ${res.status}`)
+    const geoJSON = await res.json()
+    echarts.registerMap('world', geoJSON)
+    geoRegistered.value = true
+  } catch (e) {
+    console.error('[MapContainer] 世界地图加载失败:', e.message)
+  }
 })
 
 watch(chartOptions, (opts) => {
