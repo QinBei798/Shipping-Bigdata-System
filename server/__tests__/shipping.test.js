@@ -52,3 +52,26 @@ describe('GET /api/v1/shipping/indices', () => {
     expect(point.bdi).toBeGreaterThan(0)
   })
 })
+
+describe('GET /api/v1/shipping/routes', () => {
+  it('returns 200 with code/msg/data envelope', async () => {
+    const res = await request(app).get('/api/v1/shipping/routes')
+    expect(res.status).toBe(200)
+    expect(res.body.code).toBe(200)
+    expect(res.body.data.category).toBe('Global Main Routes Matrix')
+  })
+
+  it('each route has id, routeName, coords array with [lng, lat] pairs', async () => {
+    const res = await request(app).get('/api/v1/shipping/routes')
+    const routes = res.body.data.routes
+    expect(routes.length).toBeGreaterThanOrEqual(3)
+    const route = routes[0]
+    expect(route).toHaveProperty('id')
+    expect(route).toHaveProperty('routeName')
+    expect(route).toHaveProperty('vesselDensityValue')
+    expect(route).toHaveProperty('activeVessels')
+    expect(route).toHaveProperty('capacityTEU')
+    expect(Array.isArray(route.coords)).toBe(true)
+    expect(route.coords[0]).toHaveLength(2) // [lng, lat]
+  })
+})
