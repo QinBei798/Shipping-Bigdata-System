@@ -26,32 +26,50 @@ const { ports } = storeToRefs(marketStore)
 const chartOptions = computed(() => {
   if (!ports.value || !ports.value.length) return null
   const names = ports.value.map(p => p.portName)
-  const values = ports.value.map(p => p.throughput)
+  const dataItems = ports.value.map(p => {
+    let color
+    if (p.rank <= 3) {
+      // Top 1, 2, 3: Glowing Amber Gold Premium Gradient
+      color = {
+        type: 'linear', x: 0, y: 0, x2: 1, y2: 0,
+        colorStops: [
+          { offset: 0, color: '#FF9F43' },
+          { offset: 1, color: 'rgba(255, 159, 67, 0.15)' }
+        ]
+      }
+    } else {
+      // General ports: Teal rgba(0, 238, 221, 0.85) to Tech Blue rgba(26, 92, 255, 0.15)
+      color = {
+        type: 'linear', x: 0, y: 0, x2: 1, y2: 0,
+        colorStops: [
+          { offset: 0, color: 'rgba(0, 238, 221, 0.85)' },
+          { offset: 1, color: 'rgba(26, 92, 255, 0.15)' }
+        ]
+      }
+    }
+    return {
+      value: p.throughput,
+      itemStyle: { color }
+    }
+  })
+
   return {
     xAxis: {
       type: 'value',
       axisLabel: { color: '#7eb8ff', fontSize: 10 },
-      splitLine: { lineStyle: { color: 'rgba(126, 184, 255, 0.1)' } }
+      splitLine: { show: false } // 👈 彻底移除网格背景线，保持降噪
     },
     yAxis: {
       type: 'category',
       data: names,
       axisLabel: { color: '#7eb8ff', fontSize: 10 },
+      splitLine: { show: false }, // 彻底隐藏网格背景线
       inverse: true
     },
     series: [{
       type: 'bar',
-      data: values,
-      itemStyle: {
-        color: {
-          type: 'linear', x: 0, y: 0, x2: 1, y2: 0,
-          colorStops: [
-            { offset: 0, color: '#0a8' },
-            { offset: 1, color: '#0ff' }
-          ]
-        }
-      },
-      barMaxWidth: 20,
+      data: dataItems,
+      barMaxWidth: 16,
       label: {
         show: true,
         position: 'right',

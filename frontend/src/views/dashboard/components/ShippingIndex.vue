@@ -17,10 +17,10 @@ const marketStore = useMarketStore()
 const { indices } = storeToRefs(marketStore)
 
 const lineColors = {
-  BDI: '#0ff',
-  BCI: '#1e90ff',
-  BPI: '#0a8',
-  BSI: '#ffa500'
+  BDI: '#FFFFFF',  // Main BDI: Pure white highlight
+  BCI: '#4B5E80',  // BCI: Muted dark slate blue
+  BPI: '#5B6F96',  // BPI: Muted slate gray-blue
+  BSI: '#6C7FAD'   // BSI: Muted pale purple-gray
 }
 
 const chartOptions = computed(() => {
@@ -40,23 +40,41 @@ const chartOptions = computed(() => {
     xAxis: {
       type: 'category',
       data: dates,
-      axisLabel: { color: '#7eb8ff', fontSize: 10 }
+      axisLabel: { color: '#7eb8ff', fontSize: 10 },
+      splitLine: { show: false } // 隐藏 X 轴网格线
     },
     yAxis: {
       type: 'value',
       axisLabel: { color: '#7eb8ff', fontSize: 10 },
-      splitLine: { lineStyle: { color: 'rgba(126, 184, 255, 0.1)' } }
+      splitLine: { show: false } // 隐藏 Y 轴网格线
     },
-    series: keys.map((key, i) => ({
-      name: labels[i],
-      type: 'line',
-      data: timeline.map(t => t[key]),
-      smooth: true,
-      lineStyle: { color: lineColors[labels[i]], width: 2 },
-      itemStyle: { color: lineColors[labels[i]] },
-      symbol: 'circle',
-      symbolSize: 4
-    }))
+    series: keys.map((key, i) => {
+      const label = labels[i]
+      const isBDI = label === 'BDI'
+      const baseSeries = {
+        name: label,
+        type: 'line',
+        data: timeline.map(t => t[key]),
+        smooth: true,
+        lineStyle: { color: lineColors[label], width: isBDI ? 2.5 : 1.2 }, // 👈 辅助分项指标折线：线宽变细 (1.2)
+        itemStyle: { color: lineColors[label] },
+        symbol: 'circle',
+        symbolSize: isBDI ? 5 : 3
+      }
+
+      if (isBDI) {
+        baseSeries.areaStyle = {
+          color: {
+            type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
+            colorStops: [
+              { offset: 0, color: 'rgba(255, 255, 255, 0.06)' },
+              { offset: 1, color: 'rgba(255, 255, 255, 0)' }
+            ]
+          }
+        }
+      }
+      return baseSeries
+    })
   }
 })
 </script>

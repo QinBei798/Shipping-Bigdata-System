@@ -1,13 +1,13 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-bg-primary: #0a1628;
-  --color-bg-panel: rgba(0, 200, 200, 0.08);
-  --color-border-panel: rgba(0, 200, 200, 0.25);
-  --color-accent-cyan: #0ff;
-  --color-accent-blue: #1e90ff;
-  --color-text-primary: #e0f0ff;
-  --color-text-secondary: #7eb8ff;
+  --color-bg-primary: #040612;                /* Dark titanium black background */
+  --color-bg-panel: rgba(10, 16, 32, 0.55);   /* Premium glassmorphic panel overlay */
+  --color-border-panel: rgba(255, 255, 255, 0.05); /* Faint borders */
+  --color-accent-cyan: #00EEDD;
+  --color-accent-blue: #5A75F2;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #94a3b8;            /* Slate-400 for secondary text/labels */
 }
 
 * {
@@ -23,4 +23,32 @@ html, body, #app {
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
   font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+}
+
+/* ── 全局玻璃拟态面板重构（大厂商业BI级别降噪） ── */
+.panel-card {
+  background: var(--color-bg-panel) !important;
+  border: 1px solid var(--color-border-panel) !important;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.panel-card:hover {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* 科技数字与标签降噪规范 */
+.label-grey {
+  color: var(--color-text-secondary);
+  font-size: 12px;
+}
+
+.value-highlight {
+  color: var(--color-text-primary);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-weight: 700;
 }
