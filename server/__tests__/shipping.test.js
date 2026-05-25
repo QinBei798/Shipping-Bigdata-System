@@ -75,3 +75,41 @@ describe('GET /api/v1/shipping/routes', () => {
     expect(route.coords[0]).toHaveLength(2) // [lng, lat]
   })
 })
+
+describe('GET /api/v1/shipping/vessels', () => {
+  it('returns 200 with code/msg/data envelope', async () => {
+    const res = await request(app).get('/api/v1/shipping/vessels')
+    expect(res.status).toBe(200)
+    expect(res.body.code).toBe(200)
+    expect(res.body.data.list).toBeDefined()
+    expect(res.body.data.total).toBeGreaterThan(0)
+  })
+
+  it('each vessel has required AIS fields', async () => {
+    const res = await request(app).get('/api/v1/shipping/vessels')
+    const vessel = res.body.data.list[0]
+    expect(vessel).toHaveProperty('mmsi')
+    expect(vessel).toHaveProperty('vesselName')
+    expect(vessel).toHaveProperty('vesselType')
+    expect(vessel).toHaveProperty('latitude')
+    expect(vessel.latitude).toBeGreaterThan(-90)
+    expect(vessel.latitude).toBeLessThan(90)
+    expect(vessel).toHaveProperty('longitude')
+    expect(vessel.longitude).toBeGreaterThan(-180)
+    expect(vessel.longitude).toBeLessThan(180)
+    expect(vessel).toHaveProperty('speed')
+    expect(vessel).toHaveProperty('status')
+    expect(vessel).toHaveProperty('heading')
+  })
+
+  it('consecutive calls return slightly different positions (simulated movement)', async () => {
+    const res1 = await request(app).get('/api/v1/shipping/vessels')
+    const res2 = await request(app).get('/api/v1/shipping/vessels')
+    // With randomization, positions should differ between calls
+    const allSame = res1.body.data.list.every((v, i) =>
+      v.latitude === res2.body.data.list[i].latitude &&
+      v.longitude === res2.body.data.list[i].longitude
+    )
+    expect(allSame).toBe(false)
+  })
+})
