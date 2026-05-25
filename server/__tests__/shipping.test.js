@@ -30,3 +30,25 @@ describe('GET /api/v1/shipping/ports', () => {
     expect(port).toHaveProperty('growthRate')
   })
 })
+
+describe('GET /api/v1/shipping/indices', () => {
+  it('returns 200 with code/msg/data envelope', async () => {
+    const res = await request(app).get('/api/v1/shipping/indices')
+    expect(res.status).toBe(200)
+    expect(res.body.code).toBe(200)
+    expect(res.body.data.indexName).toBe('Baltic Dry Index (BDI)')
+  })
+
+  it('timeline array contains at least 5 entries with bdi/bci/bpi/bsi', async () => {
+    const res = await request(app).get('/api/v1/shipping/indices')
+    const timeline = res.body.data.timeline
+    expect(timeline.length).toBeGreaterThanOrEqual(5)
+    const point = timeline[0]
+    expect(point).toHaveProperty('date')
+    expect(point).toHaveProperty('bdi')
+    expect(point).toHaveProperty('bci')
+    expect(point).toHaveProperty('bpi')
+    expect(point).toHaveProperty('bsi')
+    expect(point.bdi).toBeGreaterThan(0)
+  })
+})
