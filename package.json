@@ -3,12 +3,13 @@
   "private": true,
   "description": "航运大数据Web前端可视化系统 — Monorepo Root",
   "scripts": {
-    "dev": "concurrently -n server,frontend -c blue,green \"npm run dev:server\" \"npm run dev:frontend\"",
+    "install:all": "concurrently \"cd server && npm install\" \"cd frontend && npm install\"",
     "dev:server": "cd server && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
-    "test": "npm run test:server && npm run test:frontend",
+    "dev": "concurrently -n \"server,frontend\" -c \"blue,green\" \"npm run dev:server\" \"npm run dev:frontend\"",
     "test:server": "cd server && npm run test",
-    "test:frontend": "cd frontend && npm run test"
+    "test:frontend": "cd frontend && npm run test",
+    "test": "concurrently \"npm run test:server\" \"npm run test:frontend\""
   },
   "devDependencies": {
     "concurrently": "^9.2.1"

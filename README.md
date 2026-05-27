@@ -111,16 +111,23 @@ npm --version    # 10.x.x
 
 ## 🚀 三步启动指南
 
+### ⚠️ 跨平台环境迁移避坑指南 (Windows / WSL / Linux)
+
+如果你在 **WSL/Linux** 与 **Windows 原生环境**（PowerShell / CMD）之间切换运行此项目，请务必注意以下两点：
+
+* **【清空异构二进制残留】**：由于不同操作系统的二进制动态链接库（如 `esbuild`、`lightningcss` 等）与软链接不兼容，从 WSL 切换到 Windows 原生环境（或反向迁移）时，**必须物理删除大仓根目录、`frontend/` 和 `server/` 下的所有 `node_modules` 文件夹**。
+* **【一键重新编译拉起】**：在清理了旧的依赖后，直接在大仓根目录下执行 `npm run install:all` 重新针对当前平台编译依赖，随后使用 `npm run dev` 即可一键双工点亮系统。根目录已利用 `concurrently` 托管多进程，彻底抹平了 Windows 与 Linux 的 Shell 符号差异。
+
 ### 第一步 · 一键同步依赖
 
 ```bash
-npm install && cd frontend && npm install && cd ../server && npm install && cd ..
+npm run install:all
 ```
 
 ### 第二步 · 全库 TDD 冒烟测试
 
 ```bash
-npm test
+npm run test
 ```
 
 预期输出：
