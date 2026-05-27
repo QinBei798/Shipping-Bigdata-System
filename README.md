@@ -109,41 +109,49 @@ npm --version    # 10.x.x
 
 ---
 
-## 🚀 三步启动指南
+## 🚀 快速开始 · 从克隆到运行
 
-### ⚠️ 跨平台环境迁移避坑指南 (Windows / WSL / Linux)
+### 前提环境
 
-如果你在 **WSL/Linux** 与 **Windows 原生环境**（PowerShell / CMD）之间切换运行此项目，请务必注意以下两点：
+在 Windows 上运行本项目，只需安装以下两个工具：
 
-* **【清空异构二进制残留】**：由于不同操作系统的二进制动态链接库（如 `esbuild`、`lightningcss` 等）与软链接不兼容，从 WSL 切换到 Windows 原生环境（或反向迁移）时，**必须物理删除大仓根目录、`frontend/` 和 `server/` 下的所有 `node_modules` 文件夹**。
-* **【一键重新编译拉起】**：在清理了旧的依赖后，直接在大仓根目录下执行 `npm run install:all` 重新针对当前平台编译依赖，随后使用 `npm run dev` 即可一键双工点亮系统。根目录已利用 `concurrently` 托管多进程，彻底抹平了 Windows 与 Linux 的 Shell 符号差异。
+| 工具 | 下载 | 说明 |
+|------|------|------|
+| **Node.js** ≥18 (推荐 20 LTS) | [nodejs.org](https://nodejs.org) | 运行时；安装时勾选 "Add to PATH" |
+| **Git** ≥2.30 | [git-scm.com](https://git-scm.com) | 版本控制；安装时选择 "Git Bash" |
 
-### 第一步 · 一键同步依赖
+> 安装完成后，**重新打开一个终端**（PowerShell / CMD / Git Bash），执行以下校验：
+>
+> ```powershell
+> node --version   # v20.x.x
+> npm --version    # 10.x.x
+> git --version    # 2.4x.x
+> ```
 
-```bash
+---
+
+### 快速启动流程
+
+```powershell
+# 1. 克隆仓库
+git clone https://github.com/QinBei798/Shipping-Bigdata-System.git
+cd Shipping-Bigdata-System
+
+# 2. 一键安装三层依赖（根目录 + frontend/ + server/）
 npm run install:all
-```
 
-### 第二步 · 全库 TDD 冒烟测试
-
-```bash
+# 3. 全库测试冒烟（52 项断言，确认环境无误）
 npm run test
-```
 
-预期输出：
-
-```
-✓ frontend — 42 tests passed (10 files)
-✓ server   — 10 tests passed (1 file)
-```
-
-### 第三步 · 并发双工服务挂载
-
-```bash
+# 4. 启动开发服务器（前后端并发双工）
 npm run dev
 ```
 
-### 端口映射矩阵
+完成后浏览器访问 **`http://localhost:5173`** 即可看到大屏。
+
+---
+
+### 端口映射
 
 ```
 ┌──────────────────┬──────────────────────────────────────────┐
@@ -153,6 +161,24 @@ npm run dev
 │  Backend (API)   │  http://localhost:3001/api/v1/shipping   │
 └──────────────────┴──────────────────────────────────────────┘
 ```
+
+---
+
+### 预期测试输出
+
+```
+✓ frontend — 42 tests passed (10 files)
+✓ server   — 10 tests passed (1 file)
+```
+
+---
+
+### ⚠️ 跨平台迁移说明 (WSL ↔ Windows 原生)
+
+本项目在 WSL/Linux 与 Windows 原生环境（PowerShell / CMD）之间均可用。但如果你在两者之间切换，请注意：
+
+* **【异构二进制残留】** — `esbuild`、`lightningcss` 等原生模块的二进制动态链接库在不同操作系统间不兼容。跨平台切换前，必须物理删除根目录、`frontend/`、`server/` 下的 `node_modules` 文件夹，再重新执行 `npm run install:all`。
+* **【Shell 差异已抹平】** — 根目录使用 `concurrently` 托管多进程编排，`package.json` 脚本中的路径与引号已做跨平台兼容处理，Windows CMD / PowerShell / Git Bash 均可直接运行 `npm run` 命令。
 
 ---
 
