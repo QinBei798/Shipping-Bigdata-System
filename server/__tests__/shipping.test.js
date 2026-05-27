@@ -36,7 +36,7 @@ describe('GET /api/v1/shipping/indices', () => {
     const res = await request(app).get('/api/v1/shipping/indices')
     expect(res.status).toBe(200)
     expect(res.body.code).toBe(200)
-    expect(res.body.data.indexName).toBe('Baltic Dry Index (BDI)')
+    expect(res.body.data.indexName).toBe('Baltic Dry Index (BDI) - 2025')
   })
 
   it('timeline array contains at least 5 entries with bdi/bci/bpi/bsi', async () => {

@@ -18,9 +18,9 @@ const { indices } = storeToRefs(marketStore)
 
 const lineColors = {
   BDI: '#FFFFFF',  // Main BDI: Pure white highlight
-  BCI: '#4B5E80',  // BCI: Muted dark slate blue
-  BPI: '#5B6F96',  // BPI: Muted slate gray-blue
-  BSI: '#6C7FAD'   // BSI: Muted pale purple-gray
+  BCI: '#4B5E80',  // BCI: Dark muted slate blue
+  BPI: '#4B5E80',  // BPI: Dark muted slate blue
+  BSI: '#4B5E80'   // BSI: Dark muted slate blue
 }
 
 const chartOptions = computed(() => {
@@ -33,19 +33,19 @@ const chartOptions = computed(() => {
   return {
     legend: {
       data: labels,
-      textStyle: { color: '#7eb8ff', fontSize: 10 },
+      textStyle: { color: '#7eb8ff', fontSize: 12 },
       top: 0,
       right: 0
     },
     xAxis: {
       type: 'category',
       data: dates,
-      axisLabel: { color: '#7eb8ff', fontSize: 10 },
+      axisLabel: { color: '#7eb8ff', fontSize: 12 },
       splitLine: { show: false } // 隐藏 X 轴网格线
     },
     yAxis: {
       type: 'value',
-      axisLabel: { color: '#7eb8ff', fontSize: 10 },
+      axisLabel: { color: '#7eb8ff', fontSize: 12 },
       splitLine: { show: false } // 隐藏 Y 轴网格线
     },
     series: keys.map((key, i) => {
@@ -56,7 +56,7 @@ const chartOptions = computed(() => {
         type: 'line',
         data: timeline.map(t => t[key]),
         smooth: true,
-        lineStyle: { color: lineColors[label], width: isBDI ? 2.5 : 1.2 }, // 👈 辅助分项指标折线：线宽变细 (1.2)
+        lineStyle: { color: lineColors[label], width: isBDI ? 3 : 1.2 }, // 👈 主线 3，分项 1.2
         itemStyle: { color: lineColors[label] },
         symbol: 'circle',
         symbolSize: isBDI ? 5 : 3

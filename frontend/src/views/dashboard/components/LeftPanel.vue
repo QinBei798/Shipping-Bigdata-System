@@ -1,7 +1,10 @@
 <template>
   <aside class="left-panel">
     <div class="panel-card">
-      <h3 class="panel-title">全球港口吞吐量 Top10</h3>
+      <div class="title-container">
+        <h3 class="panel-title">全球港口吞吐量 Top10</h3>
+        <span class="data-source-badge">数据来源: 2025年真实统计数据</span>
+      </div>
       <div class="chart-wrapper">
         <BarChart :options="chartOptions" v-if="chartOptions" />
         <div v-else class="loading-placeholder">
@@ -54,15 +57,21 @@ const chartOptions = computed(() => {
   })
 
   return {
+    grid: {
+      left: '15%',
+      right: '8%',
+      bottom: '3%',
+      containLabel: true
+    },
     xAxis: {
       type: 'value',
-      axisLabel: { color: '#7eb8ff', fontSize: 10 },
-      splitLine: { show: false } // 👈 彻底移除网格背景线，保持降噪
+      axisLabel: { color: '#A3AED0', fontSize: 13 },
+      splitLine: { show: false } // 彻底移除网格背景线，保持降噪
     },
     yAxis: {
       type: 'category',
       data: names,
-      axisLabel: { color: '#7eb8ff', fontSize: 10 },
+      axisLabel: { color: '#A3AED0', fontSize: 13 },
       splitLine: { show: false }, // 彻底隐藏网格背景线
       inverse: true
     },
@@ -74,7 +83,7 @@ const chartOptions = computed(() => {
         show: true,
         position: 'right',
         color: '#7eb8ff',
-        fontSize: 10,
+        fontSize: 11,
         formatter: '{c}'
       }
     }]
@@ -105,10 +114,26 @@ const chartOptions = computed(() => {
   color: var(--color-accent-cyan);
   font-size: 14px;
   font-weight: 600;
-  margin-bottom: 8px;
+  margin-bottom: 0;
   padding-left: 8px;
   border-left: 3px solid var(--color-accent-cyan);
   flex-shrink: 0;
+}
+
+.title-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.data-source-badge {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .chart-wrapper {

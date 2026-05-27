@@ -94,12 +94,16 @@ const chartOptions = computed(() => {
       {
         name: '航线运力分布',
         type: 'pie',
-        radius: ['50%', '70%'], // 👈 科技感中空环形比例
+        radius: ['45%', '65%'], // 👈 缩减比例防止大图显示臃肿
         center: ['50%', '42%'],
         avoidLabelOverlap: true,
         selectedMode: 'single', // 点击单选高亮
         label: {
-          show: false // 大屏卡片空间有限，采用极简图例+Hover Tooltip 降噪
+          show: true,
+          fontSize: 13,
+          fontWeight: 600,
+          color: '#e0f0ff',
+          formatter: '{b}: {d}%' // 👈 格式化为：航线名与百分比
         },
         itemStyle: {
           borderRadius: 4,      // 优雅小圆角

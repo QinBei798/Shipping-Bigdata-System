@@ -1,5 +1,6 @@
 export const routesData = {
   category: 'Global Main Routes Matrix',
+  description: '基于 2025 年全球航运联盟运力部署真实统计',
   routes: [
     {
       id: 'R01',
