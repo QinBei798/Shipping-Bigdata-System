@@ -24,40 +24,88 @@ MaritimeScope 是一个面向国际航运大数据场景的 **单体大仓 (Mono
 
 ---
 
-## ⚙️ 大仓依赖矩阵
+## ⚙️ 环境与依赖
 
-### 根目录 · Workspace Root
+### 🖥️ 系统环境
 
-| 依赖 | 版本 | 用途 |
-|------|------|------|
-| `concurrently` | ^9 | 前后端服务并行启动编排 |
+| 组件 | 最低版本 | 推荐版本 | 说明 |
+|------|----------|----------|------|
+| Node.js | ≥18.0 | 20.20+ | Vite 6 强制要求 ≥18；推荐 LTS 20 |
+| npm | ≥9.0 | 10.x | 随 Node 20 内置 |
+| WSL / Linux | — | Ubuntu 22.04+ | 开发环境；纯 Windows 亦可 |
+| Git | ≥2.30 | 2.40+ | 版本控制 |
 
-### 前端 · Frontend Stack
+```bash
+# 安装后校验
+node --version   # v20.x.x
+npm --version    # 10.x.x
+```
 
-| 依赖 | 版本 | 用途 |
-|------|------|------|
-| `vue` | ^3.5 | 响应式 UI 框架 |
-| `vite` | ^6.3 | 构建与开发服务器 |
-| `echarts` | ^5.6 | 多维图表引擎 |
-| `pinia` | ^3.0 | 全局状态管理 |
-| `axios` | ^1.9 | HTTP 请求客户端 |
-| `vue-router` | ^4.5 | SPA 路由 |
-| `tailwindcss` | ^4.1 | 原子化 CSS 骨架 |
-| `@tailwindcss/vite` | ^4.1 | Vite 集成插件 |
-| `@vitejs/plugin-vue` | ^5.2 | Vue SFC 编译 |
-| `vitest` | ^3.1 | 单元/集成测试框架 |
-| `@vue/test-utils` | ^2.4 | Vue 组件挂载实用工具 |
-| `jsdom` | ^26.1 | 无浏览器 DOM 模拟 |
+---
 
-### 后端 · Backend Stack
+### 📦 根目录 · Workspace Root
 
-| 依赖 | 版本 | 用途 |
-|------|------|------|
-| `node` | ≥20 | 运行时 |
-| `express` | ^5.1 | HTTP 服务框架 |
-| `cors` | ^2.8 | 跨域中间件 |
-| `vitest` | ^3.1 | API 契约测试 |
-| `supertest` | ^7.1 | HTTP 断言工具 |
+| 依赖 | 需求版本 | 锁定版本 | 层级 | 用途 |
+|------|----------|----------|------|------|
+| `concurrently` | ^9.2.1 | `9.2.1` | devDependencies | 前后端双工服务并行编排 |
+
+---
+
+### 🎨 前端 · Frontend (shipping-visual-frontend)
+
+#### 运行时依赖 (dependencies)
+
+| 依赖 | 需求版本 | 锁定版本 | 用途 |
+|------|----------|----------|------|
+| `vue` | ^3.5.16 | `3.5.34` | 渐进式响应 UI 框架 (Composition API) |
+| `echarts` | ^5.6.0 | `5.6.0` | 多维数据可视化图表引擎 |
+| `pinia` | ^3.0.2 | `3.0.4` | 类型安全全局状态管理 |
+| `axios` | ^1.9.0 | `1.16.1` | Promise 风格 HTTP 客户端 |
+| `vue-router` | ^4.5.1 | `4.6.4` | SPA 路由导航 |
+
+#### 开发与构建依赖 (devDependencies)
+
+| 依赖 | 需求版本 | 锁定版本 | 用途 |
+|------|----------|----------|------|
+| `vite` | ^6.3.5 | `6.4.2` | 极速 HMR 开发服务器与生产构建 |
+| `@vitejs/plugin-vue` | ^5.2.4 | `5.2.4` | Vue SFC 编译插件 |
+| `tailwindcss` | ^4.1.12 | `4.3.0` | 原子化 CSS 骨架 |
+| `@tailwindcss/vite` | ^4.1.12 | `4.3.0` | TailwindCSS Vite 集成插件 |
+| `vitest` | ^3.1.1 | `3.2.4` | 单元 / 集成测试框架 |
+| `@vue/test-utils` | ^2.4.6 | `2.4.10` | Vue 组件挂载测试实用工具 |
+| `jsdom` | ^26.1.0 | `26.1.0` | 无浏览器 DOM 模拟 (测试环境) |
+
+#### 核心传递依赖 (Key Transitive Dependencies)
+
+| 依赖 | 锁定版本 | 关联主包 | 用途 |
+|------|----------|----------|------|
+| `zrender` | `5.6.1` | echarts | Canvas/SVG 二维渲染内核 |
+| `postcss` | `8.5.15` | tailwindcss, vite | CSS 转换管道 |
+| `esbuild` | `0.25.12` | vite | Go 编写的高速 JS/CSS 打包器 |
+| `rollup` | `4.60.4` | vite | 生产构建 Tree-shaking 打包 |
+| `lightningcss` | `1.32.0` | tailwindcss v4 | Rust 编写的高速 CSS 编译器 |
+| `@babel/parser` | — | vue/compiler-sfc | 模板编译 AST 解析 |
+| `tinyglobby` | `0.2.16` | vitest | 测试文件快速匹配 |
+| `chai` | `5.3.3` | vitest | BDD/TDD 断言库 |
+| `happy-dom` | — | (备选 jsdom) | 轻量级 DOM 模拟替代方案 |
+
+---
+
+### 🔧 后端 · Backend (shipping-mock-server)
+
+#### 运行时依赖 (dependencies)
+
+| 依赖 | 需求版本 | 锁定版本 | 用途 |
+|------|----------|----------|------|
+| `express` | ^5.1.0 | `5.1.0` | 轻量级 HTTP 服务框架 |
+| `cors` | ^2.8.5 | `2.8.5` | 跨域资源共享中间件 |
+
+#### 开发与构建依赖 (devDependencies)
+
+| 依赖 | 需求版本 | 锁定版本 | 用途 |
+|------|----------|----------|------|
+| `vitest` | ^3.1.1 | `3.2.4` | API 端点契约测试 |
+| `supertest` | ^7.1.0 | `7.1.0` | HTTP 断言与请求模拟 |
 
 ---
 
